@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useId } from "react";
 import { getRandomUser } from "./Utility/api";
 import InstructorFunc from "./InstructorFunc";
 
@@ -14,6 +14,8 @@ const CyclOPediaFuncPage = () => {
 
   const totalRender = useRef(0);
   const prevStudentCount = useRef(0);
+  const feedbackInputRef = useRef(null);
+  const id = useId();
 
   const [inputName, setInputName] = useState(() => {
     return "";
@@ -23,11 +25,11 @@ const CyclOPediaFuncPage = () => {
   });
 
   useEffect(() => {
-    //setTotalRender((prevState) => prevState + 1);
     totalRender.current = totalRender.current + 1;
   });
 
   useEffect(() => {
+    feedbackInputRef.current.focus();
     const getUser = async () => {
       const response = await getRandomUser();
       console.log(response);
@@ -130,17 +132,22 @@ const CyclOPediaFuncPage = () => {
           onChange={(e) => {
             setInputName(e.target.value);
           }}
+          id={`${id}-inputName`}
         ></input>{" "}
-        Value: {inputName}
+        <label htmlFor={`${id}-inputName`}> Name Value: </label>
+        {inputName}
         <br />
         <textarea
           value={inputFeedback}
+          ref={feedbackInputRef}
+          id={`${id}-inputFeedback`}
           placeholder="Feedback..."
           onChange={(e) => {
             setInputFeedback(e.target.value);
           }}
         ></textarea>{" "}
-        Value: {inputFeedback}
+        <label htmlFor={`${id}-inputFeedback`}> Feedback Value: </label>
+        {inputFeedback}
       </div>
       <div className="p-3">
         <span className="h4 text-success">Students</span>
